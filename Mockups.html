@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banco Agricultura Salvadoreño — Sistema de Gestión</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:    #185FA5;
+    --blue-l:  #E6F1FB;
+    --blue-d:  #0C447C;
+    --green:   #0F6E56;
+    --green-l: #E1F5EE;
+    --purple:  #3C3489;
+    --purple-l:#EEEDFE;
+    --amber:   #BA7517;
+    --amber-l: #FAEEDA;
+    --red:     #A32D2D;
+    --red-l:   #FCEBEB;
+    --success: #3B6D11;
+    --success-l:#EAF3DE;
+    --bg:      #F2F4F7;
+    --surface: #FFFFFF;
+    --border:  #E2E6EC;
+    --text:    #111827;
+    --muted:   #6B7280;
+    --hint:    #9CA3AF;
+    --radius:  12px;
+    --radius-sm: 8px;
+    --shadow:  0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+    --role-color: var(--blue);
+    --role-light: var(--blue-l);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── TOP NAV ── */
+  .topnav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    height: 56px;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; margin-right: 24px; }
+  .brand-icon { width: 32px; height: 32px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #fff; letter-spacing: -0.5px; }
+  .brand-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .brand-sub { font-size: 11px; color: var(--muted); }
+
+  .role-tabs { display: flex; gap: 4px; flex: 1; }
+  .role-tab {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .role-tab:hover { background: var(--bg); color: var(--text); }
+  .role-tab.active { color: #fff; }
+  .role-tab[data-role="cliente"].active       { background: var(--blue); }
+  .role-tab[data-role="dependiente"].active   { background: var(--green); }
+  .role-tab[data-role="cajero"].active        { background: var(--purple); }
+  .role-tab[data-role="gerente_s"].active     { background: var(--amber); }
+  .role-tab[data-role="gerente_g"].active     { background: var(--red); }
+
+  /* ── MAIN LAYOUT ── */
+  .layout { display: flex; height: calc(100vh - 56px); }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 16px 12px;
+    overflow-y: auto;
+  }
+  .sidebar-label { font-size: 10px; font-weight: 600; color: var(--hint); text-transform: uppercase; letter-spacing: 0.08em; padding: 0 8px; margin-bottom: 6px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.12s;
+    margin-bottom: 2px;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+  }
+  .nav-item:hover { background: var(--bg); color: var(--text); }
+  .nav-item.active { color: #fff; }
+  .nav-item[data-role="cliente"].active       { background: var(--blue); }
+  .nav-item[data-role="dependiente"].active   { background: var(--green); }
+  .nav-item[data-role="cajero"].active        { background: var(--purple); }
+  .nav-item[data-role="gerente_s"].active     { background: var(--amber); }
+  .nav-item[data-role="gerente_g"].active     { background: var(--red); }
+  .nav-num { font-family: 'DM Mono', monospace; font-size: 11px; opacity: 0.7; margin-left: auto; }
+
+  /* ── CONTENT ── */
+  .content { flex: 1; overflow-y: auto; padding: 32px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-header { margin-bottom: 28px; }
+  .section-title { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .section-desc { font-size: 13px; color: var(--muted); }
+  .role-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; margin-left: 10px; vertical-align: middle; }
+
+  /* ── SCREEN GRID ── */
+  .screens-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+  .screen-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: var(--shadow); transition: transform 0.15s, box-shadow 0.15s; }
+  .screen-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+  .screen-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--hint); padding: 12px 16px 0; }
+  .screen-name { font-size: 12px; font-weight: 600; color: var(--muted); padding: 2px 16px 12px; }
+
+  /* ── PHONE MOCKUP ── */
+  .phone { margin: 0 16px 16px; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+  .phone-bar { padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+  .phone-bar-back { font-size: 11px; cursor: pointer; }
+  .phone-bar-title { font-size: 12px; font-weight: 600; }
+  .phone-body { padding: 16px 14px; }
+
+  /* colors per role */
+  .c-blue   { background: var(--blue); }
+  .c-green  { background: var(--green); }
+  .c-purple { background: var(--purple); }
+  .c-amber  { background: var(--amber); }
+  .c-red    { background: var(--red); }
+  .t-blue   { color: var(--blue-l); }
+  .t-green  { color: var(--green-l); }
+  .t-purple { color: var(--purple-l); }
+  .t-amber  { color: var(--amber-l); }
+  .t-red    { color: var(--red-l); }
+  .back-blue   { color: #B5D4F4; font-size: 11px; }
+  .back-green  { color: #9FE1CB; font-size: 11px; }
+  .back-purple { color: #CECBF6; font-size: 11px; }
+  .back-amber  { color: #FAC775; font-size: 11px; }
+  .back-red    { color: #F7C1C1; font-size: 11px; }
+
+  /* form elements */
+  .fl { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+  .fi { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; font-size: 12px; color: var(--hint); margin-bottom: 10px; font-family: 'DM Sans', sans-serif; }
+  .fsel { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; font-size: 12px; color: var(--hint); margin-bottom: 10px; width: 100%; }
+  .btn { width: 100%; border: none; border-radius: 6px; padding: 9px; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 4px; font-family: 'DM Sans', sans-serif; }
+  .btn-blue   { background: var(--blue); color: var(--blue-l); }
+  .btn-green  { background: var(--green); color: var(--green-l); }
+  .btn-purple { background: var(--purple); color: var(--purple-l); }
+  .btn-amber  { background: var(--amber); color: var(--amber-l); }
+  .btn-red    { background: var(--red); color: var(--red-l); }
+  .btn-outline { background: transparent; border: 1px solid; border-radius: 6px; padding: 8px; font-size: 12px; cursor: pointer; margin-top: 6px; width: 100%; font-family: 'DM Sans',sans-serif; font-weight:500; }
+  .btn-outline.blue  { color: var(--blue); border-color: var(--blue); }
+  .btn-outline.green { color: var(--green); border-color: var(--green); }
+
+  /* misc components */
+  .badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+  .badge-blue   { background: var(--blue-l); color: var(--blue); }
+  .badge-green  { background: var(--green-l); color: var(--green); }
+  .badge-purple { background: var(--purple-l); color: var(--purple); }
+  .badge-amber  { background: var(--amber-l); color: var(--amber); }
+  .badge-red    { background: var(--red-l); color: var(--red); }
+  .badge-ok     { background: var(--success-l); color: var(--success); font-size: 10px; font-weight:600; padding: 2px 8px; border-radius: 20px; }
+  .badge-off    { background: var(--bg); color: var(--muted); font-size: 10px; font-weight:600; padding: 2px 8px; border-radius: 20px; }
+  .badge-pend   { background: var(--amber-l); color: var(--amber); font-size: 10px; font-weight:600; padding: 2px 8px; border-radius: 20px; }
+
+  .card-acc { background: var(--bg); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  .card-num { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+  .card-bal { font-size: 18px; font-weight: 600; color: var(--text); }
+  .dashed-card { border: 1.5px dashed var(--border); border-radius: 8px; padding: 10px 12px; text-align: center; margin-bottom: 8px; }
+
+  .mov-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .mov-label { font-size: 12px; color: var(--text); }
+  .mov-date  { font-size: 10px; color: var(--hint); margin-top: 1px; }
+  .pos { color: var(--success); font-size: 12px; font-weight: 600; }
+  .neg { color: var(--red); font-size: 12px; font-weight: 600; }
+
+  .menu-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text); }
+  .menu-arr { color: var(--hint); }
+
+  .ir { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; }
+  .ik { color: var(--muted); }
+  .iv { color: var(--text); font-weight: 600; }
+
+  .sec-hdr { font-size: 10px; font-weight: 700; color: var(--hint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 12px 0; }
+
+  .emp-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .emp-name { font-size: 12px; color: var(--text); }
+  .emp-role { font-size: 10px; color: var(--hint); margin-top: 1px; }
+
+  .loan-card { background: var(--bg); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  .loan-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .loan-detail { font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+  .btn-row { display: flex; gap: 6px; }
+  .btn-approve { flex:1; background: var(--success); color: var(--success-l); border: none; border-radius: 6px; padding: 7px; font-size: 11px; font-weight:600; cursor: pointer; }
+  .btn-reject  { flex:1; background: var(--red); color: var(--red-l); border: none; border-radius: 6px; padding: 7px; font-size: 11px; font-weight:600; cursor: pointer; }
+
+  .logo-area { text-align: center; margin-bottom: 20px; }
+  .logo-circle { width: 44px; height: 44px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-size: 15px; font-weight: 700; color: #fff; }
+  .bank-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .bank-sub  { font-size: 11px; color: var(--muted); }
+
+  .screen-sub { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
+  .screen-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="brand">
+    <div class="brand-icon">BA</div>
+    <div><div class="brand-name">Banco Agricultura</div><div class="brand-sub">Sistema de gestión</div></div>
+  </div>
+  <div class="role-tabs">
+    <button class="role-tab active" data-role="cliente"     onclick="switchRole('cliente')">Cliente</button>
+    <button class="role-tab"        data-role="dependiente" onclick="switchRole('dependiente')">Dependiente</button>
+    <button class="role-tab"        data-role="cajero"      onclick="switchRole('cajero')">Cajero</button>
+    <button class="role-tab"        data-role="gerente_s"   onclick="switchRole('gerente_s')">Gte. Sucursal</button>
+    <button class="role-tab"        data-role="gerente_g"   onclick="switchRole('gerente_g')">Gte. General</button>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar"></aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- ══════════ CLIENTE ══════════ -->
+    <div class="section active" id="sec-cliente">
+      <div class="section-header">
+        <div class="section-title">Cliente <span class="role-badge badge-blue">Azul</span></div>
+        <div class="section-desc">Vistas disponibles para el cliente o prestamista registrado en el sistema.</div>
+      </div>
+      <div class="screens-grid">
+
+        <!-- 1. Login -->
+        <div class="screen-card" data-screen="1">
+          <div class="screen-num">01</div><div class="screen-name">Login</div>
+          <div class="phone">
+            <div class="phone-body">
+              <div class="logo-area">
+                <div class="logo-circle">BA</div>
+                <div class="bank-name">Banco Agricultura</div>
+                <div class="bank-sub">Sistema de gestión</div>
+              </div>
+              <div class="fl">Correo electrónico</div><div class="fi">usuario@email.com</div>
+              <div class="fl">Contraseña</div><div class="fi">••••••••</div>
+              <button class="btn btn-blue">Iniciar sesión</button>
+              <button class="btn btn-outline blue" style="margin-top:6px">Registrarse como cliente</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Registro -->
+        <div class="screen-card" data-screen="2">
+          <div class="screen-num">02</div><div class="screen-name">Registro de cliente</div>
+          <div class="phone">
+            <div class="phone-bar c-blue"><span class="back-blue">← Volver</span></div>
+            <div class="phone-body">
+              <div class="screen-title">Crear cuenta</div>
+              <div class="screen-sub">Llena tus datos para registrarte</div>
+              <div class="fl">Nombre completo</div><div class="fi">Juan Pérez</div>
+              <div class="fl">DUI</div><div class="fi">00000000-0</div>
+              <div class="fl">Correo electrónico</div><div class="fi">correo@email.com</div>
+              <div class="fl">Contraseña</div><div class="fi">••••••••</div>
+              <button class="btn btn-blue">Registrarse</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Dashboard -->
+        <div class="screen-card" data-screen="3">
+          <div class="screen-num">03</div><div class="screen-name">Dashboard — mis cuentas</div>
+          <div class="phone">
+            <div class="phone-bar c-blue"><span class="phone-bar-title t-blue">Mis cuentas</span></div>
+            <div class="phone-body">
+              <div class="screen-sub">Hola, Juan · <span class="badge badge-blue">Cliente</span></div>
+              <div class="card-acc"><div class="card-num">Cuenta #482910</div><div class="card-bal">$1,250.00</div></div>
+              <div class="card-acc"><div class="card-num">Cuenta #739021</div><div class="card-bal">$340.50</div></div>
+              <div class="dashed-card"><div class="card-num" style="margin:0">+ Abrir nueva cuenta (1 de 3)</div></div>
+              <button class="btn btn-blue" style="margin-top:8px">Realizar transferencia</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Historial -->
+        <div class="screen-card" data-screen="4">
+          <div class="screen-num">04</div><div class="screen-name">Historial de movimientos</div>
+          <div class="phone">
+            <div class="phone-bar c-blue"><span class="back-blue">← Cuentas</span><span class="phone-bar-title t-blue" style="margin-left:8px">Cuenta #482910</span></div>
+            <div class="phone-body">
+              <div class="sec-hdr">Movimientos</div>
+              <div class="mov-row"><div><div class="mov-label">Depósito</div><div class="mov-date">08 abr 2026</div></div><span class="pos">+$500.00</span></div>
+              <div class="mov-row"><div><div class="mov-label">Transferencia enviada</div><div class="mov-date">05 abr 2026</div></div><span class="neg">-$120.00</span></div>
+              <div class="mov-row"><div><div class="mov-label">Retiro</div><div class="mov-date">01 abr 2026</div></div><span class="neg">-$80.00</span></div>
+              <div class="mov-row" style="border:none"><div><div class="mov-label">Depósito inicial</div><div class="mov-date">28 mar 2026</div></div><span class="pos">+$950.00</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Transferencia -->
+        <div class="screen-card" data-screen="5">
+          <div class="screen-num">05</div><div class="screen-name">Realizar transferencia</div>
+          <div class="phone">
+            <div class="phone-bar c-blue"><span class="back-blue">← Volver</span><span class="phone-bar-title t-blue" style="margin-left:8px">Transferencia</span></div>
+            <div class="phone-body">
+              <div class="fl">Cuenta origen</div><div class="fi">Cuenta #482910 — $1,250.00</div>
+              <div class="fl">Número de cuenta destino</div><div class="fi">Ej. 739021</div>
+              <div class="fl">Monto a transferir</div><div class="fi">$0.00</div>
+              <div class="fl">Descripción (opcional)</div><div class="fi">Ej. pago de deuda</div>
+              <button class="btn btn-blue">Confirmar transferencia</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ DEPENDIENTE ══════════ -->
+    <div class="section" id="sec-dependiente">
+      <div class="section-header">
+        <div class="section-title">Dependiente del banco <span class="role-badge badge-green">Verde</span></div>
+        <div class="section-desc">Vistas para dependientes (farmacias, gasolineras, tiendas). Comisión del 5% por operación.</div>
+      </div>
+      <div class="screens-grid">
+
+        <!-- 6 -->
+        <div class="screen-card" data-screen="6">
+          <div class="screen-num">06</div><div class="screen-name">Buscar cliente por DUI</div>
+          <div class="phone">
+            <div class="phone-bar c-green"><span class="phone-bar-title t-green">Buscar cliente</span></div>
+            <div class="phone-body">
+              <div class="screen-sub">Ingresa el DUI del cliente <span class="badge badge-green">Dependiente</span></div>
+              <div class="fl">Número de DUI</div><div class="fi">00000000-0</div>
+              <button class="btn btn-green">Buscar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="screen-card" data-screen="7">
+          <div class="screen-num">07</div><div class="screen-name">Cuentas del cliente</div>
+          <div class="phone">
+            <div class="phone-bar c-green"><span class="back-green">← Buscar</span><span class="phone-bar-title t-green" style="margin-left:8px">Cuentas del cliente</span></div>
+            <div class="phone-body">
+              <div class="ir" style="margin-bottom:6px"><span class="ik">Cliente</span><span class="iv">Juan Pérez</span></div>
+              <div class="ir" style="margin-bottom:12px"><span class="ik">DUI</span><span class="iv">04829102-3</span></div>
+              <div class="sec-hdr">Cuentas bancarias</div>
+              <div class="card-acc"><div class="card-num">Cuenta #482910</div><div class="card-bal">$1,250.00</div></div>
+              <div class="card-acc"><div class="card-num">Cuenta #739021</div><div class="card-bal">$340.50</div></div>
+              <button class="btn btn-green" style="margin-top:8px">Abonar efectivo</button>
+              <button class="btn btn-outline green">Retirar efectivo</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="screen-card" data-screen="8">
+          <div class="screen-num">08</div><div class="screen-name">Abonar efectivo</div>
+          <div class="phone">
+            <div class="phone-bar c-green"><span class="back-green">← Cuentas</span><span class="phone-bar-title t-green" style="margin-left:8px">Abonar efectivo</span></div>
+            <div class="phone-body">
+              <div class="fl">Cuenta seleccionada</div><div class="fi">Cuenta #482910 — $1,250.00</div>
+              <div class="fl">Monto a abonar</div><div class="fi">$0.00</div>
+              <div class="ir" style="margin-top:4px"><span class="ik">Comisión (5%)</span><span class="iv">$0.00</span></div>
+              <hr class="divider">
+              <button class="btn btn-green">Confirmar abono</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="screen-card" data-screen="9">
+          <div class="screen-num">09</div><div class="screen-name">Retirar efectivo</div>
+          <div class="phone">
+            <div class="phone-bar c-green"><span class="back-green">← Cuentas</span><span class="phone-bar-title t-green" style="margin-left:8px">Retirar efectivo</span></div>
+            <div class="phone-body">
+              <div class="fl">Cuenta seleccionada</div><div class="fi">Cuenta #739021 — $340.50</div>
+              <div class="fl">Monto a retirar</div><div class="fi">$0.00</div>
+              <div class="ir" style="margin-top:4px"><span class="ik">Comisión (5%)</span><span class="iv">$0.00</span></div>
+              <hr class="divider">
+              <button class="btn btn-green">Confirmar retiro</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ CAJERO ══════════ -->
+    <div class="section" id="sec-cajero">
+      <div class="section-header">
+        <div class="section-title">Cajero <span class="role-badge badge-purple">Morado</span></div>
+        <div class="section-desc">Empleado del banco. Registra clientes, dependientes, opera depósitos/retiros y abre préstamos.</div>
+      </div>
+      <div class="screens-grid">
+
+        <!-- 10 -->
+        <div class="screen-card" data-screen="10">
+          <div class="screen-num">10</div><div class="screen-name">Menú principal</div>
+          <div class="phone">
+            <div class="phone-bar c-purple"><span class="phone-bar-title t-purple">Panel cajero</span></div>
+            <div class="phone-body">
+              <div class="screen-sub">Bienvenido, Carlos · <span class="badge badge-purple">Cajero</span></div>
+              <div class="menu-item">Registrar nuevo cliente <span class="menu-arr">›</span></div>
+              <div class="menu-item">Agregar dependiente <span class="menu-arr">›</span></div>
+              <div class="menu-item">Depósito / retiro a cuenta <span class="menu-arr">›</span></div>
+              <div class="menu-item" style="border:none">Apertura de préstamo <span class="menu-arr">›</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="screen-card" data-screen="11">
+          <div class="screen-num">11</div><div class="screen-name">Registrar cliente</div>
+          <div class="phone">
+            <div class="phone-bar c-purple"><span class="back-purple">← Menú</span><span class="phone-bar-title t-purple" style="margin-left:8px">Nuevo cliente</span></div>
+            <div class="phone-body">
+              <div class="fl">Nombre completo</div><div class="fi">Nombre apellido</div>
+              <div class="fl">DUI</div><div class="fi">00000000-0</div>
+              <div class="fl">Correo electrónico</div><div class="fi">correo@email.com</div>
+              <div class="fl">Teléfono</div><div class="fi">0000-0000</div>
+              <button class="btn btn-purple">Registrar cliente</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="screen-card" data-screen="12">
+          <div class="screen-num">12</div><div class="screen-name">Depósito / retiro</div>
+          <div class="phone">
+            <div class="phone-bar c-purple"><span class="back-purple">← Menú</span><span class="phone-bar-title t-purple" style="margin-left:8px">Depósito / retiro</span></div>
+            <div class="phone-body">
+              <div class="fl">DUI del cliente</div><div class="fi">00000000-0</div>
+              <div class="fl">Número de cuenta</div><div class="fi">Ej. 482910</div>
+              <div class="fl">Tipo de operación</div><div class="fsel">Depósito ▾</div>
+              <div class="fl">Monto</div><div class="fi">$0.00</div>
+              <button class="btn btn-purple">Realizar operación</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="screen-card" data-screen="13">
+          <div class="screen-num">13</div><div class="screen-name">Apertura de préstamo</div>
+          <div class="phone">
+            <div class="phone-bar c-purple"><span class="back-purple">← Menú</span><span class="phone-bar-title t-purple" style="margin-left:8px">Apertura de préstamo</span></div>
+            <div class="phone-body">
+              <div class="fl">DUI del cliente</div><div class="fi">00000000-0</div>
+              <div class="fl">Salario mensual</div><div class="fi">$0.00</div>
+              <div class="fl">Monto del préstamo</div><div class="fi">$0.00</div>
+              <hr class="divider">
+              <div class="ir"><span class="ik">Interés aplicable</span><span class="iv">—</span></div>
+              <div class="ir"><span class="ik">Cuota mensual estimada</span><span class="iv">—</span></div>
+              <div class="ir" style="margin-bottom:12px"><span class="ik">Plazo estimado</span><span class="iv">—</span></div>
+              <button class="btn btn-purple">Crear caso de préstamo</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ GERENTE SUCURSAL ══════════ -->
+    <div class="section" id="sec-gerente_s">
+      <div class="section-header">
+        <div class="section-title">Gerente de sucursal <span class="role-badge badge-amber">Ámbar</span></div>
+        <div class="section-desc">Administra el personal de la sucursal y aprueba o rechaza casos de préstamo.</div>
+      </div>
+      <div class="screens-grid">
+
+        <!-- 14 -->
+        <div class="screen-card" data-screen="14">
+          <div class="screen-num">14</div><div class="screen-name">Menú principal</div>
+          <div class="phone">
+            <div class="phone-bar c-amber"><span class="phone-bar-title t-amber">Panel gerente sucursal</span></div>
+            <div class="phone-body">
+              <div class="screen-sub">Bienvenido, María · <span class="badge badge-amber">Gte. Sucursal</span></div>
+              <div class="menu-item">Registrar nuevo empleado <span class="menu-arr">›</span></div>
+              <div class="menu-item">Lista de empleados <span class="menu-arr">›</span></div>
+              <div class="menu-item" style="border:none">Casos de préstamos <span class="menu-arr">›</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="screen-card" data-screen="15">
+          <div class="screen-num">15</div><div class="screen-name">Registrar empleado</div>
+          <div class="phone">
+            <div class="phone-bar c-amber"><span class="back-amber">← Menú</span><span class="phone-bar-title t-amber" style="margin-left:8px">Nuevo empleado</span></div>
+            <div class="phone-body">
+              <div class="fl">Nombre completo</div><div class="fi">Nombre apellido</div>
+              <div class="fl">DUI</div><div class="fi">00000000-0</div>
+              <div class="fl">Correo electrónico</div><div class="fi">correo@email.com</div>
+              <div class="fl">Cargo</div><div class="fsel">Cajero ▾</div>
+              <div class="fl">Salario</div><div class="fi">$0.00</div>
+              <button class="btn btn-amber">Enviar acción de personal</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16 -->
+        <div class="screen-card" data-screen="16">
+          <div class="screen-num">16</div><div class="screen-name">Lista de empleados</div>
+          <div class="phone">
+            <div class="phone-bar c-amber"><span class="back-amber">← Menú</span><span class="phone-bar-title t-amber" style="margin-left:8px">Empleados</span></div>
+            <div class="phone-body">
+              <div class="sec-hdr">Empleados</div>
+              <div class="emp-row"><div><div class="emp-name">Carlos Ramos</div><div class="emp-role">Cajero</div></div><span class="badge-ok">Activo</span></div>
+              <div class="emp-row"><div><div class="emp-name">Laura Gómez</div><div class="emp-role">Recepcionista</div></div><span class="badge-ok">Activo</span></div>
+              <div class="emp-row" style="border:none"><div><div class="emp-name">Pedro Villalta</div><div class="emp-role">Asesor financiero</div></div><span class="badge-off">Inactivo</span></div>
+              <hr class="divider">
+              <button class="btn btn-amber">Dar de baja empleado</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 17 -->
+        <div class="screen-card" data-screen="17">
+          <div class="screen-num">17</div><div class="screen-name">Casos de préstamos</div>
+          <div class="phone">
+            <div class="phone-bar c-amber"><span class="back-amber">← Menú</span><span class="phone-bar-title t-amber" style="margin-left:8px">Casos de préstamos</span></div>
+            <div class="phone-body">
+              <div class="sec-hdr">En espera de revisión</div>
+              <div class="loan-card">
+                <div class="loan-name">Juan Pérez</div>
+                <div class="loan-detail">Monto: $10,000 · Interés: 3% · Cuota: $300/mes</div>
+                <div class="btn-row"><button class="btn-approve">Aprobar</button><button class="btn-reject">Rechazar</button></div>
+              </div>
+              <div class="loan-card">
+                <div class="loan-name">Ana Martínez</div>
+                <div class="loan-detail">Monto: $25,000 · Interés: 3% · Cuota: $750/mes</div>
+                <div class="btn-row"><button class="btn-approve">Aprobar</button><button class="btn-reject">Rechazar</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ GERENTE GENERAL ══════════ -->
+    <div class="section" id="sec-gerente_g">
+      <div class="section-header">
+        <div class="section-title">Gerente general <span class="role-badge badge-red">Rojo</span></div>
+        <div class="section-desc">Máxima autoridad. Aprueba acciones de personal, crea sucursales y ve movimientos globales.</div>
+      </div>
+      <div class="screens-grid">
+
+        <!-- 18 -->
+        <div class="screen-card" data-screen="18">
+          <div class="screen-num">18</div><div class="screen-name">Menú principal</div>
+          <div class="phone">
+            <div class="phone-bar c-red"><span class="phone-bar-title t-red">Panel gerente general</span></div>
+            <div class="phone-body">
+              <div class="screen-sub">Bienvenido, Roberto · <span class="badge badge-red">Gte. General</span></div>
+              <div class="menu-item">Acciones de personal pendientes <span class="menu-arr">›</span></div>
+              <div class="menu-item">Registrar nueva sucursal <span class="menu-arr">›</span></div>
+              <div class="menu-item" style="border:none">Ver todos los movimientos <span class="menu-arr">›</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 19 -->
+        <div class="screen-card" data-screen="19">
+          <div class="screen-num">19</div><div class="screen-name">Acciones de personal</div>
+          <div class="phone">
+            <div class="phone-bar c-red"><span class="back-red">← Menú</span><span class="phone-bar-title t-red" style="margin-left:8px">Acciones de personal</span></div>
+            <div class="phone-body">
+              <div class="sec-hdr">Pendientes de aprobación</div>
+              <div class="loan-card">
+                <div class="ir"><span class="ik">Empleado</span><span class="iv">Carlos Ramos</span></div>
+                <div class="ir"><span class="ik">Cargo</span><span class="iv">Cajero</span></div>
+                <div class="ir" style="margin-bottom:8px"><span class="ik">Sucursal</span><span class="iv">Sucursal Centro</span></div>
+                <div class="btn-row"><button class="btn-approve">Aprobar</button><button class="btn-reject">Rechazar</button></div>
+              </div>
+              <div class="loan-card">
+                <div class="ir"><span class="ik">Empleado</span><span class="iv">Laura Gómez</span></div>
+                <div class="ir"><span class="ik">Cargo</span><span class="iv">Recepcionista</span></div>
+                <div class="ir" style="margin-bottom:8px"><span class="ik">Sucursal</span><span class="iv">Sucursal Escalón</span></div>
+                <div class="btn-row"><button class="btn-approve">Aprobar</button><button class="btn-reject">Rechazar</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 20 -->
+        <div class="screen-card" data-screen="20">
+          <div class="screen-num">20</div><div class="screen-name">Registrar sucursal</div>
+          <div class="phone">
+            <div class="phone-bar c-red"><span class="back-red">← Menú</span><span class="phone-bar-title t-red" style="margin-left:8px">Nueva sucursal</span></div>
+            <div class="phone-body">
+              <div class="fl">Nombre de la sucursal</div><div class="fi">Ej. Sucursal Santa Ana</div>
+              <div class="fl">Dirección</div><div class="fi">Dirección completa</div>
+              <div class="fl">Departamento</div><div class="fsel">San Salvador ▾</div>
+              <div class="fl">Gerente de sucursal asignado</div><div class="fsel">Seleccionar empleado ▾</div>
+              <button class="btn btn-red">Crear sucursal</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 21 -->
+        <div class="screen-card" data-screen="21">
+          <div class="screen-num">21</div><div class="screen-name">Movimientos globales</div>
+          <div class="phone">
+            <div class="phone-bar c-red"><span class="back-red">← Menú</span><span class="phone-bar-title t-red" style="margin-left:8px">Movimientos globales</span></div>
+            <div class="phone-body">
+              <div class="fl">Filtrar por sucursal</div><div class="fsel">Todas las sucursales ▾</div>
+              <div class="sec-hdr">Movimientos recientes</div>
+              <div class="mov-row"><div><div class="mov-label">Depósito — cta. #482910</div><div class="mov-date">Sucursal Centro · 08 abr</div></div><span class="pos">+$500.00</span></div>
+              <div class="mov-row"><div><div class="mov-label">Transferencia — cta. #739021</div><div class="mov-date">Sucursal Escalón · 07 abr</div></div><span class="neg">-$120.00</span></div>
+              <div class="mov-row" style="border:none"><div><div class="mov-label">Retiro — cta. #301245</div><div class="mov-date">Sucursal Santa Ana · 06 abr</div></div><span class="neg">-$200.00</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const navData = {
+  cliente:     [["01","Login"],["02","Registro de cliente"],["03","Dashboard"],["04","Historial de movimientos"],["05","Realizar transferencia"]],
+  dependiente: [["06","Buscar cliente por DUI"],["07","Cuentas del cliente"],["08","Abonar efectivo"],["09","Retirar efectivo"]],
+  cajero:      [["10","Menú principal"],["11","Registrar cliente"],["12","Depósito / retiro"],["13","Apertura de préstamo"]],
+  gerente_s:   [["14","Menú principal"],["15","Registrar empleado"],["16","Lista de empleados"],["17","Casos de préstamos"]],
+  gerente_g:   [["18","Menú principal"],["19","Acciones de personal"],["20","Registrar sucursal"],["21","Movimientos globales"]],
+};
+
+let currentRole = 'cliente';
+
+function buildSidebar(role) {
+  const sidebar = document.getElementById('sidebar');
+  const items = navData[role];
+  sidebar.innerHTML = `<div class="sidebar-label" style="margin-bottom:10px">Pantallas</div>` +
+    items.map(([num, label]) => `
+      <button class="nav-item" data-role="${role}" onclick="scrollToScreen(${parseInt(num)})">
+        <span>${label}</span><span class="nav-num">${num}</span>
+      </button>`).join('');
+}
+
+function switchRole(role) {
+  currentRole = role;
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.toggle('active', t.dataset.role === role));
+  document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === `sec-${role}`));
+  buildSidebar(role);
+  document.querySelector('.content').scrollTo(0, 0);
+}
+
+function scrollToScreen(num) {
+  const card = document.querySelector(`[data-screen="${num}"]`);
+  if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+buildSidebar('cliente');
+</script>
+</body>
+</html>
