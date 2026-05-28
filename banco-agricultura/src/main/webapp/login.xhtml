@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core">
+
+<h:head>
+    <title>Banco Agricultura — Iniciar sesión</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <h:outputStylesheet library="css" name="estilos.css"/>
+</h:head>
+
+<h:body styleClass="login-page">
+
+    <div class="login-container">
+
+        <div class="login-brand">
+            <div class="brand-icon">BA</div>
+            <h1 class="brand-name">Banco Agricultura</h1>
+            <p class="brand-sub">Sistema de gestión</p>
+        </div>
+
+        <h:panelGroup rendered="#{param.error != null}">
+            <div class="msg-error">Usuario o contraseña incorrectos.</div>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{param.logout != null}">
+            <div class="msg-success">Sesión cerrada correctamente.</div>
+        </h:panelGroup>
+
+        <form action="j_spring_security_check" method="post">
+
+            <div class="field">
+                <label for="username">Correo electrónico</label>
+                <input type="text" id="username" name="username"
+                       class="input" placeholder="usuario@email.com" required="required"/>
+            </div>
+
+            <div class="field">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password"
+                       class="input" placeholder="••••••••" required="required"/>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                Iniciar sesión
+            </button>
+
+        </form>
+
+        <div class="login-footer">
+            <a href="registro.xhtml" class="link-registro">
+                Registrarse como cliente
+            </a>
+        </div>
+
+    </div>
+
+</h:body>
+</html>
