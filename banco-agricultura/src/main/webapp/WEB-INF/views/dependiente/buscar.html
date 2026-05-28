@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Buscar cliente</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm" style="background:var(--green)">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span>Farmacia San Juan</span>
+            <span class="user-badge badge-dependiente">Dependiente</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/dependiente/buscar" class="nav-item active-green">
+                Buscar cliente
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title">Buscar cliente</div>
+                <div class="page-desc">Ingresa el DUI del cliente para ver sus cuentas</div>
+            </div>
+
+            <div class="card" style="max-width:480px;">
+                <form action="/banco-agricultura/dependiente/cuentas" method="get">
+                    <div class="field">
+                        <label for="dui">Número de DUI</label>
+                        <input type="text" id="dui" name="dui"
+                               class="input" placeholder="00000000-0"/>
+                    </div>
+                    <button type="submit" class="btn btn-green btn-block">
+                        Buscar
+                    </button>
+                </form>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>
