@@ -23,7 +23,7 @@
         <property name="url"
                   value="jdbc:mysql://localhost:3306/banco_agricultura?useSSL=false&amp;serverTimezone=America/El_Salvador&amp;allowPublicKeyRetrieval=true"/>
         <property name="username" value="root"/>
-        <property name="password" value="root"/>
+        <property name="password" value=""/>
         <property name="initialSize" value="3"/>
         <property name="maxTotal" value="10"/>
     </bean>

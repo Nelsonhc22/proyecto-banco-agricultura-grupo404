@@ -12,18 +12,15 @@
     <name>Banco Agricultura Salvadoreño</name>
 
     <properties>
-<maven.compiler.source>24</maven.compiler.source>
-<maven.compiler.target>24</maven.compiler.target>
-<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>6.1.6</spring.version>
         <hibernate.version>6.4.4.Final</hibernate.version>
-        <jsf.version>4.0.4</jsf.version>
-        <primefaces.version>13.0.10</primefaces.version>
     </properties>
 
     <dependencies>
 
-        <!-- SPRING MVC + SECURITY -->
+        <!-- SPRING MVC -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -39,28 +36,12 @@
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>6.2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>6.2.4</version>
-        </dependency>
 
-        <!-- JSF + PRIMEFACES -->
+        <!-- THYMELEAF -->
         <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>jakarta.faces</artifactId>
-            <version>${jsf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.primefaces</groupId>
-            <artifactId>primefaces</artifactId>
-            <version>${primefaces.version}</version>
-            <classifier>jakarta</classifier>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring6</artifactId>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
         <!-- HIBERNATE / JPA -->
@@ -92,20 +73,20 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- LOMBOK -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.32</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- LOGGING -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.5.6</version>
         </dependency>
+        
+        <!-- LOMBOK -->
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.32</version>
+    <scope>provided</scope>
+</dependency>
 
     </dependencies>
 
@@ -125,8 +106,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>24</source>
-                    <target>24</target>
+                    <release>21</release>
                 </configuration>
             </plugin>
         </plugins>

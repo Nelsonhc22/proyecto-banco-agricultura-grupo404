@@ -7,33 +7,14 @@
 
     <display-name>Banco Agricultura Salvadoreño</display-name>
 
-    <!-- SPRING CONTEXT -->
+    <!-- SPRING ROOT CONTEXT -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>
-            /WEB-INF/spring/applicationContext.xml
-            /WEB-INF/spring/security-config.xml
-        </param-value>
+        <param-value>/WEB-INF/spring/applicationContext.xml</param-value>
     </context-param>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-
-    <!-- JSF CONFIG -->
-    <context-param>
-        <param-name>jakarta.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
-    </context-param>
-
-    <!-- SPRING SECURITY FILTER -->
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
 
     <!-- SPRING MVC DISPATCHER -->
     <servlet>
@@ -47,18 +28,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
-        <url-pattern>/app/*</url-pattern>
-    </servlet-mapping>
-
-    <!-- JSF FACES SERVLET -->
-    <servlet>
-        <servlet-name>facesServlet</servlet-name>
-        <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>facesServlet</servlet-name>
-        <url-pattern>*.xhtml</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <!-- ENCODING -->
@@ -77,7 +47,7 @@
 
     <!-- WELCOME PAGE -->
     <welcome-file-list>
-        <welcome-file>login.xhtml</welcome-file>
+        <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
 </web-app>

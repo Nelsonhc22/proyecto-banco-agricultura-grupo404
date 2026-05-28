@@ -3,32 +3,20 @@ package com.banco.agricultura.service;
 import com.banco.agricultura.model.Usuario;
 import com.banco.agricultura.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import java.util.Optional;
 
-@Service("userDetailsServiceImpl")
-public class UserDetailsServiceImpl implements UserDetailsService {
+@Service
+public class UserDetailsServiceImpl {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByUsername(username)
-            .orElseThrow(() -> new UsernameNotFoundException(
-                "Usuario no encontrado: " + username));
-
-        if (!usuario.getActivo()) {
-            throw new UsernameNotFoundException("Usuario inactivo: " + username);
+    public Optional<Usuario> autenticar(String username, String password) {
+        Optional<Usuario> usuario = usuarioRepository.findByUsername(username);
+        if (usuario.isPresent() && usuario.get().getActivo()) {
+            return usuario;
         }
-
-        String rol = "ROLE_" + usuario.getRol().getNombreRol();
-        return new User(
-            usuario.getUsername(),
-            usuario.getPassword(),
-            List.of(new SimpleGrantedAuthority(rol))
-        );
+        return Optional.empty();
     }
 }
