@@ -15,4 +15,9 @@ public class LoginController {
     public String index() {
         return "redirect:/login";
     }
+
+    @GetMapping("/registro")
+    public String registro() {
+        return "cliente/registro";
+    }
 }

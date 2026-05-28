@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Registro</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body class="login-page">
+
+    <div class="login-container" style="max-width:480px;">
+
+        <div class="login-brand">
+            <div class="brand-icon">BA</div>
+            <h1 class="brand-name">Crear cuenta</h1>
+            <p class="brand-sub">Llena tus datos para registrarte</p>
+        </div>
+
+        <form action="/banco-agricultura/cliente/registro" method="post">
+
+            <div class="field">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre"
+                       class="input" placeholder="Juan Pérez"/>
+            </div>
+
+            <div class="field">
+                <label for="dui">DUI</label>
+                <input type="text" id="dui" name="dui"
+                       class="input" placeholder="00000000-0"/>
+            </div>
+
+            <div class="field">
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" name="correo"
+                       class="input" placeholder="correo@email.com"/>
+            </div>
+
+            <div class="field">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password"
+                       class="input" placeholder="••••••••"/>
+            </div>
+
+            <div class="field">
+                <label for="salario">Salario mensual</label>
+                <input type="number" id="salario" name="salario"
+                       class="input" placeholder="$0.00" step="0.01"/>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                Registrarse
+            </button>
+
+        </form>
+
+        <div class="login-footer">
+            <a href="/banco-agricultura/login" class="link-registro">
+                ← Volver al login
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>
