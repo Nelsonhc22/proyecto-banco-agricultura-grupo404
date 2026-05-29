@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Gerente General</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm" style="background:var(--red)">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span>Bienvenido, Roberto</span>
+            <span class="user-badge badge-gerente-g">Gte. General</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/gerente-general/menu" class="nav-item active-red">
+                Panel principal
+            </a>
+            <a href="/banco-agricultura/gerente-general/acciones-personal" class="nav-item">
+                Acciones de personal
+            </a>
+            <a href="/banco-agricultura/gerente-general/registrar-sucursal" class="nav-item">
+                Registrar sucursal
+            </a>
+            <a href="/banco-agricultura/gerente-general/movimientos" class="nav-item">
+                Movimientos globales
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title">Panel gerente general</div>
+                <div class="page-desc">Supervisión global del banco</div>
+            </div>
+
+            <div class="card-grid">
+                <a href="/banco-agricultura/gerente-general/acciones-personal"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">👤 Acciones de personal</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Aprobar o rechazar altas y bajas de empleados
+                    </p>
+                </a>
+                <a href="/banco-agricultura/gerente-general/registrar-sucursal"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">🏦 Registrar sucursal</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Crear una nueva sucursal del banco
+                    </p>
+                </a>
+                <a href="/banco-agricultura/gerente-general/movimientos"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">📊 Movimientos globales</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Ver todos los movimientos de todas las sucursales
+                    </p>
+                </a>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>

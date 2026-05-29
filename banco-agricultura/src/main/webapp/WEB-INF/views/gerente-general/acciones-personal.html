@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Acciones de personal</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm" style="background:var(--red)">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span class="user-badge badge-gerente-g">Gte. General</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/gerente-general/menu" class="nav-item">
+                Panel principal
+            </a>
+            <a href="/banco-agricultura/gerente-general/acciones-personal"
+               class="nav-item active-red">
+                Acciones de personal
+            </a>
+            <a href="/banco-agricultura/gerente-general/registrar-sucursal" class="nav-item">
+                Registrar sucursal
+            </a>
+            <a href="/banco-agricultura/gerente-general/movimientos" class="nav-item">
+                Movimientos globales
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <a href="/banco-agricultura/gerente-general/menu"
+                   style="font-size:13px; color:#6B7280; text-decoration:none;">
+                    ← Menú
+                </a>
+                <div class="page-title" style="margin-top:8px;">Acciones de personal</div>
+                <div class="page-desc">Pendientes de aprobación</div>
+            </div>
+
+            <div class="card" style="max-width:700px;">
+
+                <!-- Acción 1 -->
+                <div style="background:var(--bg); border-radius:8px; padding:16px;
+                            margin-bottom:12px;">
+                    <div style="display:flex; justify-content:space-between;
+                                align-items:center; margin-bottom:8px;">
+                        <div>
+                            <div class="info-row">
+                                <span class="info-label">Empleado</span>
+                                <span class="info-value">Carlos Ramos</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Cargo</span>
+                                <span class="info-value">Cajero</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Sucursal</span>
+                                <span class="info-value">Sucursal Centro</span>
+                            </div>
+                        </div>
+                        <span class="status-badge status-espera">Pendiente</span>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:8px;">
+                        <button class="btn btn-success" style="flex:1;">Aprobar</button>
+                        <button class="btn btn-danger" style="flex:1;">Rechazar</button>
+                    </div>
+                </div>
+
+                <!-- Acción 2 -->
+                <div style="background:var(--bg); border-radius:8px; padding:16px;">
+                    <div style="display:flex; justify-content:space-between;
+                                align-items:center; margin-bottom:8px;">
+                        <div>
+                            <div class="info-row">
+                                <span class="info-label">Empleado</span>
+                                <span class="info-value">Laura Gómez</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Cargo</span>
+                                <span class="info-value">Recepcionista</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Sucursal</span>
+                                <span class="info-value">Sucursal Escalón</span>
+                            </div>
+                        </div>
+                        <span class="status-badge status-espera">Pendiente</span>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:8px;">
+                        <button class="btn btn-success" style="flex:1;">Aprobar</button>
+                        <button class="btn btn-danger" style="flex:1;">Rechazar</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>
