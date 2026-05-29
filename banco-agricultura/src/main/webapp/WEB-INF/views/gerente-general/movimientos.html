@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Movimientos globales</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm" style="background:var(--red)">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span class="user-badge badge-gerente-g">Gte. General</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/gerente-general/menu" class="nav-item">
+                Panel principal
+            </a>
+            <a href="/banco-agricultura/gerente-general/acciones-personal" class="nav-item">
+                Acciones de personal
+            </a>
+            <a href="/banco-agricultura/gerente-general/registrar-sucursal" class="nav-item">
+                Registrar sucursal
+            </a>
+            <a href="/banco-agricultura/gerente-general/movimientos"
+               class="nav-item active-red">
+                Movimientos globales
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <a href="/banco-agricultura/gerente-general/menu"
+                   style="font-size:13px; color:#6B7280; text-decoration:none;">
+                    ← Menú
+                </a>
+                <div class="page-title" style="margin-top:8px;">Movimientos globales</div>
+                <div class="page-desc">Todos los movimientos de todas las sucursales</div>
+            </div>
+
+            <!-- Filtro -->
+            <div class="card" style="margin-bottom:16px; padding:16px;">
+                <div class="field" style="margin-bottom:0;">
+                    <label for="sucursal">Filtrar por sucursal</label>
+                    <select id="sucursal" name="sucursal" class="select"
+                            style="max-width:300px;">
+                        <option>Todas las sucursales</option>
+                        <option>Sucursal Centro</option>
+                        <option>Sucursal Escalón</option>
+                        <option>Sucursal Santa Ana</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="sidebar-label" style="margin-bottom:12px;">
+                    Movimientos recientes
+                </div>
+                <table class="mov-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Cuenta</th>
+                            <th>Sucursal</th>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="status-badge status-aprobado">Depósito</span></td>
+                            <td>cta. #482910</td>
+                            <td>Sucursal Centro</td>
+                            <td>08 abr</td>
+                            <td class="monto-pos">+$500.00</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-espera">Transferencia</span></td>
+                            <td>cta. #739021</td>
+                            <td>Sucursal Escalón</td>
+                            <td>07 abr</td>
+                            <td class="monto-neg">-$120.00</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-rechazado">Retiro</span></td>
+                            <td>cta. #301245</td>
+                            <td>Sucursal Santa Ana</td>
+                            <td>06 abr</td>
+                            <td class="monto-neg">-$200.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>

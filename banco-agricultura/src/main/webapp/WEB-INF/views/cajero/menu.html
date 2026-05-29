@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Panel Cajero</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm" style="background:var(--purple)">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span>Bienvenido, Carlos</span>
+            <span class="user-badge badge-cajero">Cajero</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/cajero/menu" class="nav-item active-purple">
+                Panel principal
+            </a>
+            <a href="/banco-agricultura/cajero/registrar-cliente" class="nav-item">
+                Registrar cliente
+            </a>
+            <a href="/banco-agricultura/cajero/agregar-dependiente" class="nav-item">
+                Agregar dependiente
+            </a>
+            <a href="/banco-agricultura/cajero/deposito-retiro" class="nav-item">
+                Depósito / retiro
+            </a>
+            <a href="/banco-agricultura/cajero/prestamo" class="nav-item">
+                Apertura de préstamo
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title">Panel cajero</div>
+                <div class="page-desc">Selecciona una opción del menú</div>
+            </div>
+
+            <div class="card-grid">
+                <a href="/banco-agricultura/cajero/registrar-cliente"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">👤 Registrar nuevo cliente</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Crea un nuevo cliente en el sistema
+                    </p>
+                </a>
+                <a href="/banco-agricultura/cajero/agregar-dependiente"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">🏪 Agregar dependiente</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Registra un comercio como dependiente del banco
+                    </p>
+                </a>
+                <a href="/banco-agricultura/cajero/deposito-retiro"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">💰 Depósito / retiro</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Realiza operaciones en cuentas de clientes
+                    </p>
+                </a>
+                <a href="/banco-agricultura/cajero/prestamo"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">📋 Apertura de préstamo</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Crea un caso de préstamo para un cliente
+                    </p>
+                </a>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Mis cuentas</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span>Hola, <strong th:text="${nombreCliente}">Juan</strong></span>
+            <span class="user-badge badge-cliente" th:text="${rolCliente}">Cliente</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/cliente/dashboard" class="nav-item active-blue">
+                Mis cuentas
+            </a>
+            <a href="/banco-agricultura/cliente/transferencia" class="nav-item">
+                Realizar transferencia
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title">Mis cuentas</div>
+                <div class="page-desc">Administra tus cuentas bancarias</div>
+            </div>
+
+            <div class="card">
+                <div class="card-grid">
+                    <!-- Cuenta 1 -->
+                    <div class="cuenta-card">
+                        <div class="cuenta-num">Cuenta #482910</div>
+                        <div class="cuenta-saldo">$1,250.00</div>
+                        <a href="/banco-agricultura/cliente/historial"
+                           style="display:block; margin-top:10px; font-size:12px; color:#185FA5;">
+                            Ver movimientos →
+                        </a>
+                    </div>
+                    <!-- Cuenta 2 -->
+                    <div class="cuenta-card">
+                        <div class="cuenta-num">Cuenta #739021</div>
+                        <div class="cuenta-saldo">$340.50</div>
+                        <a href="/banco-agricultura/cliente/historial"
+                           style="display:block; margin-top:10px; font-size:12px; color:#185FA5;">
+                            Ver movimientos →
+                        </a>
+                    </div>
+                    <!-- Nueva cuenta -->
+                    <div class="cuenta-nueva">
+                        + Abrir nueva cuenta (1 de 3)
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;">
+                    <a href="/banco-agricultura/cliente/transferencia"
+                       class="btn btn-primary">
+                        Realizar transferencia
+                    </a>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>
