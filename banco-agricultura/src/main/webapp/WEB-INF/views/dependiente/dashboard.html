@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Panel Dependiente</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm bg-dependiente">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span>Hola, <strong th:text="${nombreUsuario}">Dependiente</strong></span>
+            <span class="user-badge badge-dependiente">Dependiente</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-label">Operaciones</div>
+            <a href="/banco-agricultura/dependiente/dashboard" class="nav-item active-green">
+                Buscar por DUI
+            </a>
+        </aside>
+
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title">Operaciones de Dependiente</div>
+                <div class="page-desc">Busca un cliente para realizar abonos o retiros</div>
+            </div>
+
+            <div class="card" style="max-width: 600px;">
+                <form id="form-busqueda" style="margin-bottom: 20px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 8px;">DUI del Cliente:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input
+                            type="text"
+                            id="input-dui"
+                            placeholder="00000000-0"
+                            class="form-control"
+                            required
+                        />
+                        <button type="submit" id="btn-buscar" class="btn btn-success">
+                            Buscar
+                        </button>
+                    </div>
+                </form>
+
+                <div id="mensaje-error" class="alert alert-danger" style="display: none;"></div>
+                
+                <div id="contenedor-cuentas" style="display: none;">
+                    <h3 style="margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Cuentas Bancarias Encontradas:</h3>
+                    <div id="lista-cuentas" class="card-grid">
+                        </div>
+                </div>
+            </div>
+        </main>
+    </div>
+        <div id="modal-transaccion" class="modal-overlay" style="display: none;">
+        <div class="modal-content card">
+            <div class="modal-header">
+                <h3 id="modal-titulo">Realizar Transacción</h3>
+                <button type="button" id="btn-cerrar-modal" class="btn-close">&times;</button>
+            </div>
+            
+            <form id="form-transaccion" style="margin-top: 15px;">
+                <input type="hidden" id="transaccion-cuenta" value="">
+                <input type="hidden" id="transaccion-tipo" value="">
+                
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Cuenta seleccionada:</label>
+                    <input type="text" id="display-cuenta" class="form-control" disabled style="background-color: #f3f4f6; color: #6b7280;" />
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label id="label-monto" style="display: block; font-weight: bold; margin-bottom: 5px;">Monto ($):</label>
+                    <input type="number" id="input-monto" class="form-control" step="0.01" min="0.01" placeholder="0.00" required />
+                </div>
+
+                <div style="margin-bottom: 20px; padding-top: 15px; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #4b5563; font-weight: bold; font-size: 14px;">Comisión de Dependiente (5%):</span>
+                    <span id="display-comision" style="color: #111827; font-weight: bold; font-size: 18px;">$0.00</span>
+                </div>
+
+                <button type="submit" id="btn-confirmar-transaccion" class="btn btn-success" style="width: 100%;">
+                    Confirmar Transacción
+                </button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Variables globales del modal
+        const modalTransaccion = document.getElementById('modal-transaccion');
+        const modalTitulo = document.getElementById('modal-titulo');
+        const labelMonto = document.getElementById('label-monto');
+        const displayCuenta = document.getElementById('display-cuenta');
+        const displayComision = document.getElementById('display-comision');
+        const inputMonto = document.getElementById('input-monto');
+        const formTransaccion = document.getElementById('form-transaccion');
+        const inputHiddenCuenta = document.getElementById('transaccion-cuenta');
+        const inputHiddenTipo = document.getElementById('transaccion-tipo');
+        const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const formBusqueda = document.getElementById('form-busqueda');
+            const inputDui = document.getElementById('input-dui');
+            const btnBuscar = document.getElementById('btn-buscar');
+            const mensajeError = document.getElementById('mensaje-error');
+            const contenedorCuentas = document.getElementById('contenedor-cuentas');
+            const listaCuentas = document.getElementById('lista-cuentas');
+
+            // 1. LÓGICA DE BÚSQUEDA
+            formBusqueda.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const dui = inputDui.value.trim();
+                
+                mensajeError.style.display = 'none';
+                contenedorCuentas.style.display = 'none';
+                listaCuentas.innerHTML = '';
+                btnBuscar.innerText = 'Buscando...';
+
+                try {
+                    let cuentas = [];
+                    if (dui === '00000000-0') {
+                        cuentas = [
+                            { numero_cuenta: '482910', saldo_actual: '1250.00' },
+                            { numero_cuenta: 'XC0021', saldo_actual: '340.50' }
+                        ];
+                    } else {
+                        throw new Error('No se encontraron cuentas para este DUI.');
+                    }
+
+                    if (cuentas.length > 0) {
+                        renderizarCuentas(cuentas);
+                        contenedorCuentas.style.display = 'block';
+                    }
+                } catch (error) {
+                    mensajeError.innerText = error.message;
+                    mensajeError.style.display = 'block';
+                } finally {
+                    btnBuscar.innerText = 'Buscar';
+                }
+            });
+
+            function renderizarCuentas(cuentas) {
+                cuentas.forEach(cuenta => {
+                    const cuentaHTML = `
+                        <div class="cuenta-card" style="border-top: 4px solid #15803d;">
+                            <div class="cuenta-num">Cuenta #${cuenta.numero_cuenta}</div>
+                            <div class="cuenta-saldo" style="margin: 10px 0;">$${cuenta.saldo_actual}</div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button onclick="prepararTransaccion('${cuenta.numero_cuenta}', 'ABONO', '${cuenta.saldo_actual}')" class="btn btn-success" style="flex: 1; font-size: 12px; padding: 8px;">Abonar</button>
+                                <button onclick="prepararTransaccion('${cuenta.numero_cuenta}', 'RETIRO', '${cuenta.saldo_actual}')" class="btn btn-success-dark" style="flex: 1; font-size: 12px; padding: 8px;">Retirar</button>
+                            </div>
+                        </div>
+                    `;
+                    listaCuentas.insertAdjacentHTML('beforeend', cuentaHTML);
+                });
+            }
+
+            // 2. LÓGICA DEL MODAL Y CÁLCULO DE COMISIÓN
+            btnCerrarModal.addEventListener('click', cerrarModal);
+
+            inputMonto.addEventListener('input', (e) => {
+                const monto = parseFloat(e.target.value) || 0;
+                // Calculamos el 5% al vuelo
+                const comision = (monto * 0.05).toFixed(2);
+                displayComision.innerText = `$${comision}`;
+            });
+
+            formTransaccion.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const numeroCuenta = inputHiddenCuenta.value;
+                const tipo = inputHiddenTipo.value;
+                const monto = parseFloat(inputMonto.value);
+
+                // Aquí reemplazaremos esto con tu llamada a fetch() hacia POST /abonarefectivo o /retirarefectivo
+                alert(`¡Simulación exitosa!\n\nOperación: ${tipo}\nCuenta: ${numeroCuenta}\nMonto a procesar: $${monto}\nComisión generada: $${(monto * 0.05).toFixed(2)}`);
+                
+                cerrarModal();
+            });
+        });
+
+        // Funciones auxiliares globales para los botones onclick
+        function prepararTransaccion(numeroCuenta, tipo, saldoActual) {
+            // Llenamos el modal con los datos
+            modalTitulo.innerText = tipo === 'ABONO' ? 'Abonar Efectivo' : 'Retirar Efectivo';
+            labelMonto.innerText = tipo === 'ABONO' ? 'Monto a depositar ($):' : 'Monto a retirar ($):';
+            displayCuenta.value = `Cuenta #${numeroCuenta} — Saldo: $${saldoActual}`;
+            
+            inputHiddenCuenta.value = numeroCuenta;
+            inputHiddenTipo.value = tipo;
+            
+            // Limpiamos montos previos
+            inputMonto.value = '';
+            displayComision.innerText = '$0.00';
+            
+            // Mostramos el modal
+            modalTransaccion.style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            modalTransaccion.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
