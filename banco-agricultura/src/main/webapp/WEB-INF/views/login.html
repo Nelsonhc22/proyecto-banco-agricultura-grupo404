@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Iniciar sesión</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body class="login-page">
+
+    <div class="login-container">
+
+        <div class="login-brand">
+            <div class="brand-icon">BA</div>
+            <h1 class="brand-name">Banco Agricultura</h1>
+            <p class="brand-sub">Sistema de gestión</p>
+        </div>
+
+        <div th:if="${param.error}" class="msg-error">
+            Usuario o contraseña incorrectos.
+        </div>
+        <div th:if="${param.logout}" class="msg-success">
+            Sesión cerrada correctamente.
+        </div>
+
+        <form action="/banco-agricultura/login" method="post">
+            <div class="field">
+                <label for="username">Correo electrónico</label>
+                <input type="text" id="username" name="username"
+                       class="input" placeholder="usuario@email.com"/>
+            </div>
+            <div class="field">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password"
+                       class="input" placeholder="••••••••"/>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+                Iniciar sesión
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <a href="/banco-agricultura/registro" class="link-registro">
+                Registrarse como cliente
+            </a>
+        </div>
+
+    </div>
+
+</body>
+</html>

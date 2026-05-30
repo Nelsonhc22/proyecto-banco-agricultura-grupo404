@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Abonar efectivo</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm" style="background:var(--green)">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span class="user-badge badge-dependiente">Dependiente</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/dependiente/buscar" class="nav-item active-green">
+                Buscar cliente
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <a href="/banco-agricultura/dependiente/cuentas"
+                   style="font-size:13px; color:#6B7280; text-decoration:none;">
+                    ← Cuentas
+                </a>
+                <div class="page-title" style="margin-top:8px;">Abonar efectivo</div>
+                <div class="page-desc">Se aplicará una comisión del 5% por la operación</div>
+            </div>
+
+            <div class="card" style="max-width:480px;">
+                <form action="/banco-agricultura/dependiente/abonar" method="post">
+
+                    <div class="field">
+                        <label>Cuenta seleccionada</label>
+                        <select class="select">
+                            <option>Cuenta #482910 — $1,250.00</option>
+                            <option>Cuenta #739021 — $340.50</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="monto">Monto a abonar</label>
+                        <input type="number" id="monto" name="monto"
+                               class="input" placeholder="$0.00" step="0.01"
+                               oninput="calcularComision(this.value)"/>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">Comisión (5%)</span>
+                        <span class="info-value" id="comision">$0.00</span>
+                    </div>
+
+                    <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;"/>
+
+                    <button type="submit" class="btn btn-green btn-block">
+                        Confirmar abono
+                    </button>
+
+                </form>
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        function calcularComision(monto) {
+            const comision = (parseFloat(monto) * 0.05).toFixed(2);
+            document.getElementById('comision').textContent =
+                isNaN(comision) ? '$0.00' : '$' + comision;
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Gerente Sucursal</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm" style="background:var(--amber)">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span>Bienvenida, María</span>
+            <span class="user-badge badge-gerente-s">Gte. Sucursal</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/gerente-sucursal/menu" class="nav-item active-amber">
+                Panel principal
+            </a>
+            <a href="/banco-agricultura/gerente-sucursal/registrar-empleado" class="nav-item">
+                Registrar empleado
+            </a>
+            <a href="/banco-agricultura/gerente-sucursal/empleados" class="nav-item">
+                Lista de empleados
+            </a>
+            <a href="/banco-agricultura/gerente-sucursal/prestamos" class="nav-item">
+                Casos de préstamos
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <div class="page-title">Panel gerente sucursal</div>
+                <div class="page-desc">Sucursal Centro — San Salvador</div>
+            </div>
+
+            <div class="card-grid">
+                <a href="/banco-agricultura/gerente-sucursal/registrar-empleado"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">👤 Registrar nuevo empleado</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Agrega un nuevo empleado a la sucursal
+                    </p>
+                </a>
+                <a href="/banco-agricultura/gerente-sucursal/empleados"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">👥 Lista de empleados</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Ver y gestionar empleados de la sucursal
+                    </p>
+                </a>
+                <a href="/banco-agricultura/gerente-sucursal/prestamos"
+                   class="card" style="text-decoration:none; cursor:pointer;">
+                    <div class="card-title">📋 Casos de préstamos</div>
+                    <p style="font-size:13px; color:var(--muted);">
+                        Aprobar o rechazar solicitudes de préstamo
+                    </p>
+                </a>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>

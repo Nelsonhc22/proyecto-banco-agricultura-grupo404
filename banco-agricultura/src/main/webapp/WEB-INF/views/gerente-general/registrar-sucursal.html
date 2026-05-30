@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Registrar sucursal</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm" style="background:var(--red)">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span class="user-badge badge-gerente-g">Gte. General</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/gerente-general/menu" class="nav-item">
+                Panel principal
+            </a>
+            <a href="/banco-agricultura/gerente-general/acciones-personal" class="nav-item">
+                Acciones de personal
+            </a>
+            <a href="/banco-agricultura/gerente-general/registrar-sucursal"
+               class="nav-item active-red">
+                Registrar sucursal
+            </a>
+            <a href="/banco-agricultura/gerente-general/movimientos" class="nav-item">
+                Movimientos globales
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <a href="/banco-agricultura/gerente-general/menu"
+                   style="font-size:13px; color:#6B7280; text-decoration:none;">
+                    ← Menú
+                </a>
+                <div class="page-title" style="margin-top:8px;">Nueva sucursal</div>
+            </div>
+
+            <div class="card" style="max-width:500px;">
+                <form action="/banco-agricultura/gerente-general/registrar-sucursal"
+                      method="post">
+                    <div class="field">
+                        <label for="nombre">Nombre de la sucursal</label>
+                        <input type="text" id="nombre" name="nombre"
+                               class="input" placeholder="Ej. Sucursal Santa Ana"/>
+                    </div>
+                    <div class="field">
+                        <label for="direccion">Dirección</label>
+                        <input type="text" id="direccion" name="direccion"
+                               class="input" placeholder="Dirección completa"/>
+                    </div>
+                    <div class="field">
+                        <label for="departamento">Departamento</label>
+                        <select id="departamento" name="departamento" class="select">
+                            <option>San Salvador</option>
+                            <option>Santa Ana</option>
+                            <option>San Miguel</option>
+                            <option>La Libertad</option>
+                            <option>Sonsonate</option>
+                            <option>Usulután</option>
+                            <option>San Vicente</option>
+                            <option>Cuscatlán</option>
+                            <option>La Paz</option>
+                            <option>Chalatenango</option>
+                            <option>Morazán</option>
+                            <option>La Unión</option>
+                            <option>Cabañas</option>
+                            <option>Ahuachapán</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="gerente">Gerente de sucursal asignado</label>
+                        <select id="gerente" name="gerente" class="select">
+                            <option>Seleccionar empleado</option>
+                            <option>Carlos Ramos</option>
+                            <option>Laura Gómez</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-red btn-block">
+                        Crear sucursal
+                    </button>
+                </form>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>

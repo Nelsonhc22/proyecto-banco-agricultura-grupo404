@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Historial</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span class="user-badge badge-cliente">Cliente</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/cliente/dashboard" class="nav-item">
+                Mis cuentas
+            </a>
+            <a href="/banco-agricultura/cliente/transferencia" class="nav-item">
+                Realizar transferencia
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <a href="/banco-agricultura/cliente/dashboard"
+                   style="font-size:13px; color:#6B7280; text-decoration:none;">
+                    ← Cuentas
+                </a>
+                <div class="page-title" style="margin-top:8px;">
+                    Cuenta #482910
+                </div>
+                <div class="page-desc">Historial de movimientos</div>
+            </div>
+
+            <div class="card">
+                <table class="mov-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="status-badge status-aprobado">Depósito</span></td>
+                            <td>Depósito en efectivo</td>
+                            <td>08 abr 2026</td>
+                            <td class="monto-pos">+$500.00</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-espera">Transferencia</span></td>
+                            <td>Transferencia enviada</td>
+                            <td>05 abr 2026</td>
+                            <td class="monto-neg">-$120.00</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-rechazado">Retiro</span></td>
+                            <td>Retiro en efectivo</td>
+                            <td>01 abr 2026</td>
+                            <td class="monto-neg">-$80.00</td>
+                        </tr>
+                        <tr>
+                            <td><span class="status-badge status-aprobado">Depósito</span></td>
+                            <td>Depósito inicial</td>
+                            <td>28 mar 2026</td>
+                            <td class="monto-pos">+$950.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>

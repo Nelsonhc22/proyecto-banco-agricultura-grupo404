@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Banco Agricultura — Empleados</title>
+    <link th:href="@{/resources/css/estilos.css}" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- TOPBAR -->
+    <nav class="topbar">
+        <div class="brand">
+            <div class="brand-icon-sm" style="background:var(--amber)">BA</div>
+            <span class="brand-text">Banco Agricultura</span>
+        </div>
+        <div class="user-info">
+            <span class="user-badge badge-gerente-s">Gte. Sucursal</span>
+            <a href="/banco-agricultura/login" class="btn-logout">Cerrar sesión</a>
+        </div>
+    </nav>
+
+    <div class="app-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-label">Menú</div>
+            <a href="/banco-agricultura/gerente-sucursal/menu" class="nav-item">
+                Panel principal
+            </a>
+            <a href="/banco-agricultura/gerente-sucursal/registrar-empleado" class="nav-item">
+                Registrar empleado
+            </a>
+            <a href="/banco-agricultura/gerente-sucursal/empleados"
+               class="nav-item active-amber">
+                Lista de empleados
+            </a>
+            <a href="/banco-agricultura/gerente-sucursal/prestamos" class="nav-item">
+                Casos de préstamos
+            </a>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="main-content">
+            <div class="page-header">
+                <a href="/banco-agricultura/gerente-sucursal/menu"
+                   style="font-size:13px; color:#6B7280; text-decoration:none;">
+                    ← Menú
+                </a>
+                <div class="page-title" style="margin-top:8px;">Empleados</div>
+                <div class="page-desc">Sucursal Centro</div>
+            </div>
+
+            <div class="card">
+                <table class="mov-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cargo</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Carlos Ramos</td>
+                            <td>Cajero</td>
+                            <td><span class="status-badge status-activo">Activo</span></td>
+                            <td>
+                                <button class="btn btn-danger"
+                                        style="padding:4px 12px; font-size:12px;">
+                                    Dar de baja
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Laura Gómez</td>
+                            <td>Recepcionista</td>
+                            <td><span class="status-badge status-activo">Activo</span></td>
+                            <td>
+                                <button class="btn btn-danger"
+                                        style="padding:4px 12px; font-size:12px;">
+                                    Dar de baja
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pedro Villalta</td>
+                            <td>Asesor financiero</td>
+                            <td><span class="status-badge status-inactivo">Inactivo</span></td>
+                            <td>—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+    </div>
+
+</body>
+</html>
