@@ -9,6 +9,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/dependiente")
 public class DependienteController {
 
+    // 1. Nueva ruta para la vista unificada del Dependiente
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        // Retorna el archivo dashboard.html ubicado en WEB-INF/views/dependiente/
+        return "dependiente/dashboard";
+    }
+
+    // --- Rutas anteriores mantenidas por compatibilidad ---
+
     @GetMapping("/buscar")
     public String buscar(Model model) {
         return "dependiente/buscar";
